@@ -6,9 +6,9 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 products = [
-    {"id": 1, "name": "tomatoes", "quantity": 100},
-    {"id": 2, "name": "dish soap", "quantity": 50},
-    {"id": 3, "name": "detergent", "quantity": 75}
+    {"id": 1, "name": "tomatoes", "quantity": 100, "price": 2.36},
+    {"id": 2, "name": "dish soap", "quantity": 50, "price": 4.68},
+    {"id": 3, "name": "detergent", "quantity": 75, "price": 10.12}
 ]
 
 
@@ -33,8 +33,9 @@ def get_specific_product(product_id):
 def create_product():
     new_product = {
         "id": len(products) + 1,
-        "title": request.json.get('title'),
-        "done": False
+        "name": request.json.get('name'),
+        "quantity": request.json.get('quantity'),
+        "price": request.json.get('price')
     }
     products.append(new_product)
     return jsonify({"message": "Product created", "product": new_product}), 201
