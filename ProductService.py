@@ -2,8 +2,6 @@ import os
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-
 app = Flask(__name__)
 products = [
     {"id": 1, "name": "tomatoes", "quantity": 100, "price": 2.36},
@@ -21,9 +19,9 @@ def get_products():
 # Endpoint 2: Get a specific product by ID
 @app.route('/products/<int:product_id>', methods=['GET'])
 def get_specific_product(product_id):
-    task = next((product for product in products if product["id"] == product_id), None)
-    if task:
-        return jsonify({"product": products})
+    product = next((product for product in products if product["id"] == product_id), None)
+    if product:
+        return jsonify({"product": product})
     else:
         return jsonify({"error": "product not found"}), 404
 
