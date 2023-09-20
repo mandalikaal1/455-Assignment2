@@ -1,6 +1,4 @@
-import os
 from flask import Flask, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 products = [
@@ -13,7 +11,7 @@ products = [
 # endpoint 1: get all products
 @app.route('/products', methods=['GET'])
 def get_products():
-    return jsonify({"products": products})
+    return jsonify(products)
 
 
 # Endpoint 2: Get a specific product by ID
@@ -21,7 +19,7 @@ def get_products():
 def get_specific_product(product_id):
     product = next((product for product in products if product["id"] == product_id), None)
     if product:
-        return jsonify({"product": product})
+        return jsonify(product)
     else:
         return jsonify({"error": "product not found"}), 404
 
@@ -37,6 +35,19 @@ def create_product():
     }
     products.append(new_product)
     return jsonify({"message": "Product created", "product": new_product}), 201
+
+
+# Endpoint 4: update product
+@app.route('/products/<int:product_id>', methods=['POST'])
+def update_product(product_id):
+    change = {
+        "id": product_id,
+        "name": request.json.get('name'),
+        "quantity": request.json.get('quantity'),
+        "price": request.json.get('price')
+    }
+    products[product_id-1] = change
+    return jsonify({"message": "Product updated", "product": change}), 201
 
 
 if __name__ == '__main__':
